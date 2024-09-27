@@ -7,6 +7,9 @@ from player import Player
 
 
 def main():
+    updatable, drawable = pygame.sprite.Group(), pygame.sprite.Group()
+    Player.containers = (updatable, drawable)
+
     print(
         f"Starting asteroids!\nScreen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")
     pygame.init()
@@ -15,7 +18,7 @@ def main():
     clock = pygame.time.Clock()
     dt = 0
 
-    player_one = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     while (True):
         for event in pygame.event.get():
@@ -23,7 +26,13 @@ def main():
                 return
 
         screen.fill((0, 0, 0))
-        player_one.draw(screen)
+
+        for item in updatable:
+            item.update(dt)
+
+        for item in drawable:
+            item.draw(screen)
+
         pygame.display.flip()
 
         delta_time = clock.tick(60)
